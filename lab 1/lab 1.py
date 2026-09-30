@@ -1,4 +1,4 @@
-// задание 17
+// 17
 deposit = float(input("Введите сумму вклада: "))
 interest_rate = float(input("Введите годовую процентную ставку (%): "))
 years = int(input("Введите количество лет: "))
@@ -9,7 +9,7 @@ final_amount = deposit * (1 + rate) ** years
 
 print("Итоговая сумма:", final_amount)
 
-// задание 4
+// 4
 celsius = float(input("Введите температуру в градусах Цельсия: "))
 
 fahrenheit = celsius * 9 / 5 + 32
@@ -18,7 +18,7 @@ kelvin = celsius + 273.15
 print("Температура в Фаренгейтах:", fahrenheit)
 print("Температура в Кельвинах:", kelvin)
 
-// задание 11
+// 11
 
 price = float(input("Введите цену товара: "))
 quantity = int(input("Введите количество товара: "))
