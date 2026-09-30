@@ -3,6 +3,8 @@ const addButton = document.getElementById("addButton");
 const taskList = document.getElementById("taskList");
 const counter = document.getElementById("counter");
 const message = document.getElementById("message");
+const searchInput = document.getElementById("searchInput");
+
 
 let tasks = [];
 
@@ -31,8 +33,14 @@ function addTask() {
 function renderTasks() {
     taskList.innerHTML = "";
 
+    const searchText = searchInput.value.toLowerCase();
+
     for (let i = 0; i < tasks.length; i++) {
         const task = tasks[i];
+
+        if (!task.text.toLowerCase().includes(searchText)) {
+            continue;
+        }
 
         const li = document.createElement("li");
         const checkbox = document.createElement("input");
@@ -99,3 +107,7 @@ taskInput.addEventListener("keydown", function (event) {
 });
 
 renderTasks();
+
+searchInput.addEventListener("input", function () {
+    renderTasks();
+});
