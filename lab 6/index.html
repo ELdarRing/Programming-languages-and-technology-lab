@@ -1,0 +1,18 @@
+<!DOCTYPE html> <html lang="ru"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Корзина интернет-магазина</title> <link rel="stylesheet" href="style.css"> </head> <body> <header class="header"> <h1>Корзина интернет-магазина</h1> <div class="cart-counter"> Товаров: <span id="cart-count">0</span> </div> </header> <main class="container"> <section class="cart"> <h2>Ваши товары</h2>
+    <div id="cart-items" class="cart-items">
+    </div>
+
+    <div id="empty-cart" class="empty-cart hidden">
+        <p>Корзина пуста</p>
+    </div>
+
+    <div class="cart-summary">
+        <p>Количество товаров: <strong id="total-count">0</strong></p>
+        <p>Итого: <strong id="total-price">0 ₸</strong></p>
+        <button id="clear-cart" class="clear-button">
+            Очистить корзину
+        </button>
+    </div>
+</section>
+
+</main> <script src="script.js"></script> </body> </html>
