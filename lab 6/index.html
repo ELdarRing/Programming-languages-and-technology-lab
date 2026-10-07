@@ -1,196 +1,205 @@
-const cartItemsElement = document.getElementById("cart-items");
-const cartCountElement = document.getElementById("cart-count");
-const totalCountElement = document.getElementById("total-count");
-const totalPriceElement = document.getElementById("total-price");
-const emptyCartElement = document.getElementById("empty-cart");
-const clearCartButton = document.getElementById("clear-cart");
-
-let cart = JSON.parse(localStorage.getItem("cart")) || [
-{
-id: 1,
-name: "Беспроводные наушники",
-price: 25000,
-quantity: 1
-},
-{
-id: 2,
-name: "Клавиатура",
-price: 18000,
-quantity: 2
-},
-{
-id: 3,
-name: "Компьютерная мышь",
-price: 12000,
-quantity: 1
-}
-];
-
-function formatPrice(price) {
-return price.toLocaleString("ru-RU") + " ₸";
-}
-
-function saveCart() {
-localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-function renderCart() {
-cartItemsElement.innerHTML = "";
-
-if (cart.length === 0) {
-    emptyCartElement.classList.remove("hidden");
-} else {
-    emptyCartElement.classList.add("hidden");
-}
-
-cart.forEach(item => {
-    const cartItem = document.createElement("div");
-    cartItem.classList.add("cart-item");
-
-    const productInfo = document.createElement("div");
-    productInfo.classList.add("product-info");
-
-    const productName = document.createElement("div");
-    productName.classList.add("product-name");
-    productName.textContent = item.name;
-
-    const productPrice = document.createElement("div");
-    productPrice.classList.add("product-price");
-    productPrice.textContent = "Цена: " + formatPrice(item.price);
-
-    productInfo.appendChild(productName);
-    productInfo.appendChild(productPrice);
-
-    const quantityControl = document.createElement("div");
-    quantityControl.classList.add("quantity-control");
-
-    const minusButton = document.createElement("button");
-    minusButton.textContent = "−";
-    minusButton.setAttribute("aria-label", "Уменьшить количество");
-
-    const quantity = document.createElement("span");
-    quantity.classList.add("quantity");
-    quantity.textContent = item.quantity;
-
-    const plusButton = document.createElement("button");
-    plusButton.textContent = "+";
-    plusButton.setAttribute("aria-label", "Увеличить количество");
-
-    minusButton.addEventListener("click", () => {
-        changeQuantity(item.id, -1);
-    });
-
-    plusButton.addEventListener("click", () => {
-        changeQuantity(item.id, 1);
-    });
-
-    quantityControl.appendChild(minusButton);
-    quantityControl.appendChild(quantity);
-    quantityControl.appendChild(plusButton);
-
-    const itemTotal = document.createElement("div");
-    itemTotal.classList.add("item-total");
-    itemTotal.textContent = formatPrice(item.price * item.quantity);
-
-    const deleteButton = document.createElement("button");
-    deleteButton.classList.add("delete-button");
-    deleteButton.textContent = "Удалить";
-
-    deleteButton.addEventListener("click", () => {
-        removeItem(item.id);
-    });
-
-    cartItem.appendChild(productInfo);
-    cartItem.appendChild(quantityControl);
-    cartItem.appendChild(itemTotal);
-    cartItem.appendChild(deleteButton);
-
-    cartItemsElement.appendChild(cartItem);
-});
-
-updateSummary();
-
-
-}
-
-function changeQuantity(id, change) {
-const item = cart.find(product => product.id === id);
-
-if (!item) {
-    return;
-}
-
-item.quantity += change;
-
-if (item.quantity <= 0) {
-    removeItem(id);
-    return;
-}
-
-saveCart();
-renderCart();
-
-
-}
-
-function removeItem(id) {
-const item = cart.find(product => product.id === id);
-
-if (!item) {
-    return;
-}
-
-const confirmed = confirm(
-    `Удалить товар "${item.name}" из корзины?`
-);
-
-if (!confirmed) {
-    return;
-}
-
-cart = cart.filter(product => product.id !== id);
-
-saveCart();
-renderCart();
-
-
-}
-
-function updateSummary() {
-const totalCount = cart.reduce(
-(sum, item) => sum + item.quantity,
-0
-);
-
-const totalPrice = cart.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-);
-
-cartCountElement.textContent = totalCount;
-totalCountElement.textContent = totalCount;
-totalPriceElement.textContent = formatPrice(totalPrice);
-
-
-}
-
-clearCartButton.addEventListener("click", () => {
-if (cart.length === 0) {
-return;
-}
-
-const confirmed = confirm("Вы действительно хотите очистить корзину?");
-
-if (!confirmed) {
-    return;
-}
-
-cart = [];
-
-saveCart();
-renderCart();
-
-
-});
-
-renderCart();
+<!DOCTYPE html> <html lang="ru"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Интернет-магазин</title> <link rel="stylesheet" href="style.css"> </head> <body> <header class="header"> <div class="logo" id="shop-button"> 🛒 Интернет-магазин </div>
+    <nav class="navigation">
+        <button id="catalog-button" class="nav-button active">
+            Каталог
+        </button>
+    
+        <button id="cart-button" class="nav-button">
+            Корзина
+            <span id="cart-count" class="cart-count">0</span>
+        </button>
+    </nav>
+    
+    </header> <main class="container">
+    
+    <section id="catalog-page" class="page">
+    
+        <div class="page-title">
+            <h1>Каталог товаров</h1>
+            <p>Выберите товары, которые хотите приобрести</p>
+        </div>
+    
+        <div id="products" class="products">
+    
+            <article class="product-card">
+                <div class="product-image">🎧</div>
+    
+                <h2>Беспроводные наушники</h2>
+    
+                <p class="product-description">
+                    Качественный звук, удобное управление и
+                    длительное время работы.
+                </p>
+    
+                <div class="product-bottom">
+                    <span class="product-price">25 000 ₸</span>
+    
+                    <button
+                        class="add-button"
+                        data-id="1">
+                        В корзину
+                    </button>
+                </div>
+            </article>
+    
+            <article class="product-card">
+                <div class="product-image">⌨️</div>
+    
+                <h2>Механическая клавиатура</h2>
+    
+                <p class="product-description">
+                    Удобная клавиатура с подсветкой для работы
+                    и игр.
+                </p>
+    
+                <div class="product-bottom">
+                    <span class="product-price">18 000 ₸</span>
+    
+                    <button
+                        class="add-button"
+                        data-id="2">
+                        В корзину
+                    </button>
+                </div>
+            </article>
+    
+            <article class="product-card">
+                <div class="product-image">🖱️</div>
+    
+                <h2>Компьютерная мышь</h2>
+    
+                <p class="product-description">
+                    Эргономичная мышь с высокой точностью
+                    позиционирования.
+                </p>
+    
+                <div class="product-bottom">
+                    <span class="product-price">12 000 ₸</span>
+    
+                    <button
+                        class="add-button"
+                        data-id="3">
+                        В корзину
+                    </button>
+                </div>
+            </article>
+    
+            <article class="product-card">
+                <div class="product-image">💻</div>
+    
+                <h2>Ноутбук</h2>
+    
+                <p class="product-description">
+                    Производительный ноутбук для учебы,
+                    работы и развлечений.
+                </p>
+    
+                <div class="product-bottom">
+                    <span class="product-price">350 000 ₸</span>
+    
+                    <button
+                        class="add-button"
+                        data-id="4">
+                        В корзину
+                    </button>
+                </div>
+            </article>
+    
+            <article class="product-card">
+                <div class="product-image">📱</div>
+    
+                <h2>Смартфон</h2>
+    
+                <p class="product-description">
+                    Современный смартфон с ярким экраном
+                    и хорошей камерой.
+                </p>
+    
+                <div class="product-bottom">
+                    <span class="product-price">180 000 ₸</span>
+    
+                    <button
+                        class="add-button"
+                        data-id="5">
+                        В корзину
+                    </button>
+                </div>
+            </article>
+    
+            <article class="product-card">
+                <div class="product-image">🖥️</div>
+    
+                <h2>Монитор</h2>
+    
+                <p class="product-description">
+                    Большой экран с высоким разрешением
+                    для комфортной работы.
+                </p>
+    
+                <div class="product-bottom">
+                    <span class="product-price">95 000 ₸</span>
+    
+                    <button
+                        class="add-button"
+                        data-id="6">
+                        В корзину
+                    </button>
+                </div>
+            </article>
+    
+        </div>
+    </section>
+    
+    
+    
+    <section id="cart-page" class="page hidden">
+    
+        <div class="page-title">
+            <h1>Корзина</h1>
+            <p>Товары, выбранные вами</p>
+        </div>
+    
+        <div id="cart-items" class="cart-items">
+        </div>
+    
+        <div id="empty-cart" class="empty-cart hidden">
+            <div class="empty-icon">🛒</div>
+            <h2>Корзина пуста</h2>
+            <p>Добавьте товары из каталога</p>
+    
+            <button id="go-to-catalog" class="primary-button">
+                Перейти в каталог
+            </button>
+        </div>
+    
+        <div id="cart-summary" class="cart-summary">
+    
+            <div class="summary-row">
+                <span>Количество товаров:</span>
+                <strong id="total-count">0</strong>
+            </div>
+    
+            <div class="summary-row total-row">
+                <span>Итого:</span>
+                <strong id="total-price">0 ₸</strong>
+            </div>
+    
+            <div class="summary-buttons">
+                <button
+                    id="continue-shopping"
+                    class="secondary-button">
+                    ← Продолжить покупки
+                </button>
+    
+                <button
+                    id="clear-cart"
+                    class="clear-button">
+                    Очистить корзину
+                </button>
+            </div>
+    
+        </div>
+    
+    </section>
+    
+    </main> <footer class="footer"> <p>Лабораторная работа №6 — Работа с DOM</p> </footer> <script src="script.js"></script> </body> </html>
