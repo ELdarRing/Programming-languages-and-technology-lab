@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Бронирование аудиторий</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Бронирование аудиторий</h1>
+      <p>Выберите аудиторию и удобное время для занятия.</p>
+    </header>
+
+    <nav aria-label="Разделы приложения">
+      <button type="button" class="tab active"
+              data-tab="rooms" aria-current="page">
+        Аудитории
+      </button>
+      <button type="button" class="tab" data-tab="bookings">
+        Бронирования
+      </button>
+      <button type="button" class="tab" data-tab="rules">
+        Правила
+      </button>
+    </nav>
+
+    <main id="content"></main>
+  </div>
+</body>
+</html>
